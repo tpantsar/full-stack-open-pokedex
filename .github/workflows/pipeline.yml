@@ -45,7 +45,7 @@ jobs:
           path: dist/
           retention-days: 7
       - name: Notify Discord on Build Failure
-        uses: Ilshidur/action-discord@master
+        uses: Ilshidur/action-discord@08d9328877d6954120eef2b07abbc79249bb6210
         if: ${{ failure() }}
         with:
           args: " "  # Required argument (but empty since we use DISCORD_EMBEDS)
@@ -133,12 +133,19 @@ jobs:
             --header 'content-type: application/json' \
             --data '{"clearCache": "do_not_clear"}'
       - name: Notify Discord on Deploy Success
-        uses: Ilshidur/action-discord@0c4b27844ba47cb1c7bee539c8eead5284ce9fa9
-        env:
-          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+        uses: Ilshidur/action-discord@08d9328877d6954120eef2b07abbc79249bb6210
         if: ${{ success() }}
         with:
-          args: '✅New version deployed! Url: https://full-stack-open-pokedex-vr42.onrender.com/'
+          args: " "  # Required argument (but empty since we use DISCORD_EMBEDS)
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+          DISCORD_EMBEDS: >
+            [{
+              "title": "✅New version deployed!",
+              "description": "Url: https://full-stack-open-pokedex-vr42.onrender.com/",
+              "color": 65280,
+              "timestamp": "${{ github.event.head_commit.timestamp || github.event.pull_request.updated_at }}"
+            }]
 
   tag_release:
     # only run if the commit message does not contain #skip
