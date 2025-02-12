@@ -45,14 +45,12 @@ jobs:
           path: dist/
           retention-days: 7
       - name: Notify Discord on Build Failure
-        uses: rjstone/discord-webhook-notify@v1
+        uses: Ilshidur/action-discord@0c4b27844ba47cb1c7bee539c8eead5284ce9fa9
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
         if: ${{ failure() }}
         with:
-          severity: error
-          text: Build Failed!
-          description: "Commit: ${{ github.event.head_commit.url }}"
-          details: "Commit msg: ${{ github.event.head_commit.message }}\nRepo: ${{ github.repositoryUrl }}\nWorkflow: ${{ github.workflow }}"
-          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+          args: 'Build failed! Commit: ${{ github.event.head_commit.url }}, Commit msg: ${{ github.event.head_commit.message }}, Repo: ${{ github.repositoryUrl }}, Workflow: ${{ github.workflow }}'
 
   test:
     name: Run Unit Tests
@@ -116,13 +114,12 @@ jobs:
             --header 'content-type: application/json' \
             --data '{"clearCache": "do_not_clear"}'
       - name: Notify Discord on Deploy Success
-        uses: rjstone/discord-webhook-notify@v1
+        uses: Ilshidur/action-discord@0c4b27844ba47cb1c7bee539c8eead5284ce9fa9
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
         if: ${{ success() }}
         with:
-          severity: info
-          text: New version deployed!
-          description: "Url: https://full-stack-open-pokedex-vr42.onrender.com/"
-          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+          args: 'New version deployed! Url: https://full-stack-open-pokedex-vr42.onrender.com/'
 
   tag_release:
     # only run if the commit message does not contain #skip
