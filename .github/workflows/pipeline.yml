@@ -45,12 +45,30 @@ jobs:
           path: dist/
           retention-days: 7
       - name: Notify Discord on Build Failure
-        uses: Ilshidur/action-discord@0c4b27844ba47cb1c7bee539c8eead5284ce9fa9
+        uses: Ilshidur/action-discord@master
+        with:
+          args: ""  # Required argument (but empty since we use DISCORD_EMBEDS)
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
-        if: ${{ failure() }}
-        with:
-          args: '❌Build failed!\nCommit: ${{ github.event.head_commit.url }}\nCommit msg: ${{ github.event.head_commit.message }}\nRepo: ${{ github.repositoryUrl }}\nWorkflow: ${{ github.workflow }}'
+          DISCORD_EMBEDS: >
+            [{
+              "title": "❌Build failed!",
+              "description": "Commit: ${{ github.event.head_commit.url }}",
+              "color": 16711680,
+              "fields": [
+                {
+                  "name": "Commit message",
+                  "value": "${{ github.event.head_commit.message }}",
+                  "inline": false
+                },
+                {
+                  "name": "Workflow",
+                  "value": "${{ github.workflow }}",
+                  "inline": false
+                }
+              ],
+              "timestamp": "${{ github.event.head_commit.timestamp || github.event.pull_request.updated_at }}"
+            }]
           
   test:
     name: Run Unit Tests
