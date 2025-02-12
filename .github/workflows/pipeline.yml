@@ -45,7 +45,7 @@ jobs:
           path: dist/
           retention-days: 7
       - name: Notify Discord on Build Failure
-        uses: rjstone/discord-webhook-notify@89b0bf43c2c8514f70d0dcba4a706b904e8a3112
+        uses: rjstone/discord-webhook-notify@v1
         if: ${{ failure() }}
         with:
           severity: error
@@ -116,7 +116,7 @@ jobs:
             --header 'content-type: application/json' \
             --data '{"clearCache": "do_not_clear"}'
       - name: Notify Discord on Deploy Success
-        uses: rjstone/discord-webhook-notify@89b0bf43c2c8514f70d0dcba4a706b904e8a3112
+        uses: rjstone/discord-webhook-notify@v1
         if: ${{ success() }}
         with:
           severity: info
