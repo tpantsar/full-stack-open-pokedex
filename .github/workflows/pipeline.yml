@@ -48,11 +48,11 @@ jobs:
         uses: rjstone/discord-webhook-notify@89b0bf43c2c8514f70d0dcba4a706b904e8a3112
         if: ${{ failure() }}
         with:
-            severity: error
-            text: Build Failed!
-            description: "Commit: ${{ github.event.head_commit.url }}"
-            details: "Commit msg: ${{ github.event.head_commit.message }}\nRepo: ${{ github.repositoryUrl }}\nWorkflow: ${{ github.workflow }}"
-            webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+          severity: error
+          text: Build Failed!
+          description: "Commit: ${{ github.event.head_commit.url }}"
+          details: "Commit msg: ${{ github.event.head_commit.message }}\nRepo: ${{ github.repositoryUrl }}\nWorkflow: ${{ github.workflow }}"
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
 
   test:
     name: Run Unit Tests
@@ -119,10 +119,10 @@ jobs:
         uses: rjstone/discord-webhook-notify@89b0bf43c2c8514f70d0dcba4a706b904e8a3112
         if: ${{ success() }}
         with:
-            severity: info
-            text: New version deployed!
-            description: "url: https://full-stack-open-pokedex-vr42.onrender.com/"
-            webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+          severity: info
+          text: New version deployed!
+          description: "Url: https://full-stack-open-pokedex-vr42.onrender.com/"
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
 
   tag_release:
     # only run if the commit message does not contain #skip
