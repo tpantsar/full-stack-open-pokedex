@@ -12,8 +12,7 @@ jobs:
     name: Lint Code
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
@@ -29,8 +28,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: lint
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
@@ -52,8 +50,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [build, lint]
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
@@ -70,8 +67,7 @@ jobs:
     needs: [test, build, lint]
     timeout-minutes: 60
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
@@ -92,11 +88,16 @@ jobs:
           retention-days: 30
 
   deploy:
+    # only run if the commit message does not contain #skip
+    if: ${{ github.event_name == 'push' && !contains(github.event.head_commit.message, '#skip') }}
     name: Deploy to Render
     runs-on: ubuntu-latest
     needs: [e2e, test, build, lint]
-    if: github.event_name == 'push'
     steps:
+      - name: Commit message
+        env:
+          COMMIT_MESSAGES: ${{ toJson(github.event.head_commit.message) }} # log commit message
+        run: echo "$COMMIT_MESSAGES"
       - name: Trigger Deployment
         run: |
           curl --request POST \
@@ -107,15 +108,27 @@ jobs:
             --data '{"clearCache": "do_not_clear"}'
 
   tag_release:
+    # only run if the commit message does not contain #skip
+    if: ${{ github.event_name == 'push' && !contains(github.event.head_commit.message, '#skip') }}
     name: Tag Release
     runs-on: ubuntu-latest
     needs: [deploy, e2e, test, build, lint]
-    if: github.event_name == 'push'
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0 # Ensure the full history is fetched
+      - name: Github context
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }} # log github context
+        run: echo "$GITHUB_CONTEXT"
+      - name: Commits
+        env:
+          COMMITS: ${{ toJson(github.event.commits) }} # log commits
+        run: echo "$COMMITS"
+      - name: Commit message
+        env:
+          COMMIT_MESSAGES: ${{ toJson(github.event.head_commit.message) }} # log commit message
+        run: echo "$COMMIT_MESSAGES"
       - name: Bump version and push tag
         uses: anothrNick/github-tag-action@1.71.0
         env:
