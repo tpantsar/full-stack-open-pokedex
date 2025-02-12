@@ -46,14 +46,15 @@ jobs:
           retention-days: 7
       - name: Notify Discord on Build Failure
         uses: Ilshidur/action-discord@master
+        if: ${{ failure() }}
         with:
-          args: ""  # Required argument (but empty since we use DISCORD_EMBEDS)
+          args: " "  # Required argument (but empty since we use DISCORD_EMBEDS)
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
           DISCORD_EMBEDS: >
             [{
               "title": "❌Build failed!",
-              "description": "Commit: ${{ github.event.head_commit.url }}",
+              "description": "Commit: [${{ github.event.head_commit.id }}](${{ github.event.head_commit.url }})",
               "color": 16711680,
               "fields": [
                 {
