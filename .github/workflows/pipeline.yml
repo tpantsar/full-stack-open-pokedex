@@ -5,6 +5,7 @@ on:
     branches: [ main, master ]
   pull_request:
     branches: [ main, master ]
+    types: [opened, synchronize] # workflow will run when a PR into the main branch is opened or updated
 
 jobs:
   lint:
