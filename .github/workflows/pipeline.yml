@@ -37,7 +37,7 @@ jobs:
       - name: Install Dependencies
         run: npm ci
       - name: Build Application
-        run: npm run build
+        run: npm run non-existent-script
       - name: Upload Build Artifact
         uses: actions/upload-artifact@v4
         with:
@@ -50,8 +50,8 @@ jobs:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
         if: ${{ failure() }}
         with:
-          args: 'Build failed! Commit: ${{ github.event.head_commit.url }}, Commit msg: ${{ github.event.head_commit.message }}, Repo: ${{ github.repositoryUrl }}, Workflow: ${{ github.workflow }}'
-
+          args: '❌Build failed!\nCommit: ${{ github.event.head_commit.url }}\nCommit msg: ${{ github.event.head_commit.message }}\nRepo: ${{ github.repositoryUrl }}\nWorkflow: ${{ github.workflow }}'
+          
   test:
     name: Run Unit Tests
     runs-on: ubuntu-latest
@@ -119,7 +119,7 @@ jobs:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
         if: ${{ success() }}
         with:
-          args: 'New version deployed! Url: https://full-stack-open-pokedex-vr42.onrender.com/'
+          args: '✅New version deployed! Url: https://full-stack-open-pokedex-vr42.onrender.com/'
 
   tag_release:
     # only run if the commit message does not contain #skip
