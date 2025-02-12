@@ -130,7 +130,7 @@ jobs:
           COMMIT_MESSAGES: ${{ toJson(github.event.head_commit.message) }} # log commit message
         run: echo "$COMMIT_MESSAGES"
       - name: Bump version and push tag
-        uses: anothrNick/github-tag-action@1.71.0
+        uses: anothrNick/github-tag-action@f278d49d30cdd8775cc3e7dd00b5ee11686ee297
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DEFAULT_BUMP: patch
