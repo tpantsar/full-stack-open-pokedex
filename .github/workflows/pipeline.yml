@@ -112,6 +112,10 @@ jobs:
     needs: [deploy, e2e, test, build, lint]
     if: github.event_name == 'push'
     steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Ensure the full history is fetched
       - name: Bump version and push tag
         uses: anothrNick/github-tag-action@1.71.0
         env:
