@@ -1,5 +1,5 @@
 {
-  "name": "fullstackopen-cicd",
+  "name": "full-stack-open-pokedex",
   "version": "1.0.0",
   "description": "Full Stack Open",
   "main": "src/index.js",
@@ -16,17 +16,17 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/smartlyio/fullstackopen-cicd.git"
+    "url": "git+https://github.com/tpantsar/full-stack-open-pokedex.git"
   },
   "keywords": [
     "fullstack-open"
   ],
-  "author": "Smartly.io",
+  "author": "tpantsar",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/smartlyio/fullstackopen-cicd/issues"
+    "url": "https://github.com/tpantsar/full-stack-open-pokedex/issues"
   },
-  "homepage": "https://github.com/smartlyio/fullstackopen-cicd#readme",
+  "homepage": "https://github.com/tpantsar/full-stack-open-pokedex#readme",
   "dependencies": {
     "axios": "^1.6.5",
     "express": "^4.18.2",
