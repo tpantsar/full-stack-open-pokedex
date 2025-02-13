@@ -51,7 +51,7 @@ jobs:
           retention-days: 7
       - name: Notify Discord on Build Failure
         uses: Ilshidur/action-discord@08d9328877d6954120eef2b07abbc79249bb6210
-        if: ${{ failure() }}
+        if: failure()
         with:
           args: " "  # Required argument (but empty since we use DISCORD_EMBEDS)
         env:
@@ -139,7 +139,7 @@ jobs:
             --data '{"clearCache": "do_not_clear"}'
       - name: Notify Discord on Deploy Success
         uses: Ilshidur/action-discord@08d9328877d6954120eef2b07abbc79249bb6210
-        if: ${{ success() }}
+        if: success()
         with:
           args: " "  # Required argument (but empty since we use DISCORD_EMBEDS)
         env:

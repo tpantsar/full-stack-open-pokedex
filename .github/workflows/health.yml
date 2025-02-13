@@ -6,8 +6,8 @@ on:
     branches: [ main, master ]
     types:
       - completed
-  # schedule:
-  #   - cron: '0 0 1 * *'  # Monthly on the first day at 12:00 AM UTC
+  schedule:
+    - cron: '0 0 1 * *'  # Monthly on the first day at 12:00 AM UTC
 
 env:
   URL: https://full-stack-open-pokedex-vr42.onrender.com/
@@ -27,7 +27,7 @@ jobs:
         retry-delay: 2m
     - name: Notify Discord on Health Check Success
       uses: Ilshidur/action-discord@08d9328877d6954120eef2b07abbc79249bb6210
-      if: ${{ success() }}
+      if: success()
       with:
         args: " "  # Required argument (but empty since we use DISCORD_EMBEDS)
       env:
@@ -41,7 +41,7 @@ jobs:
           }]
     - name: Notify Discord on Health Check Failure
       uses: Ilshidur/action-discord@08d9328877d6954120eef2b07abbc79249bb6210
-      if: ${{ failure() }}
+      if: failure()
       with:
         args: " "  # Required argument (but empty since we use DISCORD_EMBEDS)
       env:
