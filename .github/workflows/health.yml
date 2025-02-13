@@ -1,0 +1,55 @@
+name: Health Check
+
+on:
+  workflow_run:
+    workflows: ["Deployment Pipeline"]
+    branches: [ main, master ]
+    types:
+      - completed
+  # schedule:
+  #   - cron: '0 0 1 * *'  # Monthly on the first day at 12:00 AM UTC
+
+env:
+  URL: https://full-stack-open-pokedex-vr42.onrender.com/
+  color_success: 65280
+  color_failure: 16711680
+
+jobs:
+  health-check:
+    runs-on: ubuntu-latest
+    steps:
+    - name: URL Health Check
+      uses: Jtalk/url-health-check-action@v4
+      with:
+        url: ${{env.URL}} # Check the following URLs one by one sequentially
+        follow-redirect: false
+        max-attempts: 3
+        retry-delay: 2m
+    - name: Notify Discord on Health Check Success
+      uses: Ilshidur/action-discord@08d9328877d6954120eef2b07abbc79249bb6210
+      if: ${{ success() }}
+      with:
+        args: " "  # Required argument (but empty since we use DISCORD_EMBEDS)
+      env:
+        DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+        DISCORD_EMBEDS: >
+          [{
+            "title": "✅Health check passed!",
+            "description": "Url: ${{env.URL}}",
+            "color": ${{env.color_success}},
+            "timestamp": "${{ github.event.repository.pushed_at }}"
+          }]
+    - name: Notify Discord on Health Check Failure
+      uses: Ilshidur/action-discord@08d9328877d6954120eef2b07abbc79249bb6210
+      if: ${{ failure() }}
+      with:
+        args: " "  # Required argument (but empty since we use DISCORD_EMBEDS)
+      env:
+        DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+        DISCORD_EMBEDS: >
+          [{
+            "title": "❌Health check failed!",
+            "description": "Url: ${{env.URL}}",
+            "color": ${{env.color_failure}},
+            "timestamp": "${{ github.event.repository.pushed_at }}"
+          }]
