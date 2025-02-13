@@ -7,6 +7,11 @@ on:
     branches: [ main, master ]
     types: [opened, synchronize] # workflow will run when a PR into the main branch is opened or updated
 
+env:
+  URL: https://full-stack-open-pokedex-vr42.onrender.com/ # URL of the deployed application
+  color_success: 65280 # green
+  color_failure: 16711680 # red
+
 jobs:
   lint:
     name: Lint Code
@@ -55,7 +60,7 @@ jobs:
             [{
               "title": "❌Build failed!",
               "description": "Commit: [${{ github.event.head_commit.id }}](${{ github.event.head_commit.url }})",
-              "color": 16711680,
+              "color": ${{env.color_failure}},
               "fields": [
                 {
                   "name": "Commit message",
@@ -142,8 +147,8 @@ jobs:
           DISCORD_EMBEDS: >
             [{
               "title": "✅New version deployed!",
-              "description": "Url: https://full-stack-open-pokedex-vr42.onrender.com/",
-              "color": 65280,
+              "description": "Url: ${{env.URL}}",
+              "color": ${{env.color_success}},
               "timestamp": "${{ github.event.head_commit.timestamp || github.event.pull_request.updated_at }}"
             }]
 
